@@ -117,4 +117,59 @@ def registrar_tarea():
     print(f"Proyecto: {nom_proyecto[id_proy-1]}")
     print(f"Empleado: {nom_empleado[id_emp-1]}")
 
+# --------------------------------------------------------------------
+#   OPCIÓN 4 - REGISTRAR HORAS TRABAJADAS
+# -----------------------------------------------------------------------
+
+def registrar_horas():
+    print("\n--- REGISTRAR HORAS TRABAJADAS ---")
+    if not nom_tarea:
+        print("ERROR: No hay tareas registradas.")
+        return
+    if not nom_empleado:
+        print("ERROR: No hay empleados registrados.")
+        return
+
+    print("Tareas disponibles:")
+    for i, t in enumerate(nom_tarea, start=1):
+        print(f"  [{i}] {t}  (Proyecto: {nom_proyecto[tarea_proyecto[i-1]]})")
+    id_tarea = pedir_entero("ID de la tarea: ")
+    if id_tarea < 1 or id_tarea > len(nom_tarea):
+        print("ERROR: ID de tarea no válido.")
+        return
+
+    print("Empleados disponibles:")
+    for i, e in enumerate(nom_empleado, start=1):
+        print(f"  [{i}] {e}")
+    id_emp = pedir_entero("ID del empleado: ")
+    if id_emp < 1 or id_emp > len(nom_empleado):
+        print("ERROR: ID de empleado no válido.")
+        return
+
+    fecha = input("Fecha (DD/MM/AAAA): ").strip()
+    horas = pedir_real("Horas trabajadas: ")
+
+    if horas <= 0 or horas > 24:
+        print("ERROR: Las horas deben ser entre 0.5 y 24.")
+        return
+
+    # Validar máximo 24h por día por empleado (igual que en PSeInt)
+    acum_dia = sum(
+        reg_horas[i]
+        for i in range(len(reg_horas))
+        if reg_empleado[i] == id_emp - 1 and reg_fecha[i] == fecha
+    )
+    if acum_dia + horas > 24:
+        print(f"ERROR: {nom_empleado[id_emp-1]} ya tiene {acum_dia}h ese día.")
+        print(f"Puede registrar hasta {24 - acum_dia:.1f} hora(s) más.")
+        return
+
+    reg_tarea.append(id_tarea - 1)
+    reg_empleado.append(id_emp - 1)
+    reg_fecha.append(fecha)
+    reg_horas.append(horas)
+    print("Horas registradas correctamente.")
+    print(f"Empleado: {nom_empleado[id_emp-1]} | Tarea: {nom_tarea[id_tarea-1]}")
+    print(f"Fecha: {fecha} | Horas: {horas}")
+    print(f"Total acumulado ese día: {acum_dia + horas:.1f}h")
 
