@@ -1,6 +1,6 @@
-# ------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   ALMACENAMIENTO EN MEMORIA
-#--------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 nom_empleado   = []
 cargo_empleado = []
@@ -17,12 +17,12 @@ reg_fecha      = []   # "DD/MM/AAAA"
 reg_horas      = []   # float
 
 
-# --------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #   UTILIDADES
-# ---------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 def separador():
-    print("--------------------------------------------------------------------")
+    print("-------------------------------------------------------------------------")
 
 def pedir_entero(mensaje):
     while True:
@@ -39,9 +39,9 @@ def pedir_real(mensaje):
             print("  Ingrese un número válido (ej: 4.5).")
 
 
-# ------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   OPCIÓN 1 - REGISTRAR EMPLEADO
-# --------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 def registrar_empleado():
     print("\n--- REGISTRAR EMPLEADO ---")
@@ -59,9 +59,9 @@ def registrar_empleado():
     print(f"Nombre: {nombre} | Cargo: {cargo}")
 
 
-# ---------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   OPCIÓN 2 - REGISTRAR PROYECTO
-# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 def registrar_proyecto():
     print("\n--- REGISTRAR PROYECTO ---")
@@ -74,9 +74,9 @@ def registrar_proyecto():
     print(f"Nombre: {nombre}")
 
 
-# --------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   OPCIÓN 3 - REGISTRAR TAREA
-# ----------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 def registrar_tarea():
     print("\n--- REGISTRAR TAREA ---")
@@ -117,9 +117,9 @@ def registrar_tarea():
     print(f"Empleado: {nom_empleado[id_emp-1]}")
 
 
-# --------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   OPCIÓN 4 - REGISTRAR HORAS TRABAJADAS
-# -----------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 def registrar_horas():
     print("\n--- REGISTRAR HORAS TRABAJADAS ---")
@@ -174,9 +174,9 @@ def registrar_horas():
     print(f"Total acumulado ese día: {acum_dia + horas:.1f}h")
 
 
-# ---------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   OPCIÓN 5 - VER HORAS POR TAREA
-# ----------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 def ver_horas_por_tarea():
     print("\n--- HORAS POR TAREA ---")
@@ -191,9 +191,9 @@ def ver_horas_por_tarea():
         print(f"       Horas    : {total_h:.1f} hora(s)")
 
 
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   OPCIÓN 6 - VER HORAS POR PROYECTO
-# -------------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 def ver_horas_por_proyecto():
     print("\n--- HORAS POR PROYECTO ---")
@@ -213,9 +213,9 @@ def ver_horas_por_proyecto():
     print(f"  TOTAL GENERAL: {gran_total:.1f} hora(s)")
 
 
-# ------------------------------------------------------------------------
-#   OPCIÓN 7 - ACTUALIZAR EMPLEADO  (CRUD - Entrega #2)
-# ---------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+#   OPCIÓN 7 - ACTUALIZAR EMPLEADO
+# -------------------------------------------------------------------------
 
 def actualizar_empleado():
     print("\n--- ACTUALIZAR EMPLEADO ---")
@@ -239,9 +239,9 @@ def actualizar_empleado():
     print(f"Empleado actualizado -> Nombre: {nom_empleado[id_emp-1]} | Cargo: {cargo_empleado[id_emp-1]}")
 
 
-# ------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 #   OPCIÓN 8 - ACTUALIZAR PROYECTO
-# --------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 def actualizar_proyecto():
     print("\n--- ACTUALIZAR PROYECTO ---")
@@ -263,3 +263,85 @@ def actualizar_proyecto():
     else:
         print("Sin cambios.")
 
+
+# -------------------------------------------------------------------------
+#   OPCIÓN 9 - ELIMINAR TAREA
+# -------------------------------------------------------------------------
+
+def eliminar_tarea():
+    print("\n--- ELIMINAR TAREA ---")
+    if not nom_tarea:
+        print("ERROR: No hay tareas registradas.")
+        return
+    print("Tareas disponibles:")
+    for i, t in enumerate(nom_tarea, start=1):
+        print(f"  [{i}] {t}  (Proyecto: {nom_proyecto[tarea_proyecto[i-1]]})")
+    id_tarea = pedir_entero("ID de la tarea a eliminar: ")
+    if id_tarea < 1 or id_tarea > len(nom_tarea):
+        print("ERROR: ID no válido.")
+        return
+    confirmacion = input(f"¿Eliminar tarea '{nom_tarea[id_tarea-1]}'? (s/n): ").strip().lower()
+    if confirmacion != "s":
+        print("Operación cancelada.")
+        return
+
+    nombre_eliminado = nom_tarea[id_tarea - 1]
+    idx = id_tarea - 1
+
+    # Eliminar registros de horas de esta tarea y reasignar índices
+    i = 0
+    while i < len(reg_tarea):
+        if reg_tarea[i] == idx:
+            reg_tarea.pop(i); reg_empleado.pop(i)
+            reg_fecha.pop(i); reg_horas.pop(i)
+        else:
+            if reg_tarea[i] > idx:
+                reg_tarea[i] -= 1
+            i += 1
+
+    nom_tarea.pop(idx)
+    tarea_proyecto.pop(idx)
+    tarea_empleado.pop(idx)
+    print(f"Tarea '{nombre_eliminado}' eliminada correctamente.")
+
+
+# -------------------------------------------------------------------------
+#   MENÚ PRINCIPAL
+# ---------------------------------------------------------------------------
+
+def menu_principal():
+    opcion = -1
+    while opcion != 0:
+        print("")
+        separador()
+        print("     GESTOR DE PROYECTOS SIMPLE      ")
+        separador()
+        print("  1. Registrar empleado")
+        print("  2. Registrar proyecto")
+        print("  3. Registrar tarea")
+        print("  4. Registrar horas trabajadas")
+        print("  5. Ver horas por tarea")
+        print("  6. Ver horas por proyecto")
+        print("  ---- CRUD --- Entrega #2 ----")
+        print("  7. Actualizar empleado")
+        print("  8. Actualizar proyecto")
+        print("  9. Eliminar tarea")
+        print("  0. Salir")
+        separador()
+        opcion = pedir_entero("Elige una opción: ")
+
+        if   opcion == 1: registrar_empleado()
+        elif opcion == 2: registrar_proyecto()
+        elif opcion == 3: registrar_tarea()
+        elif opcion == 4: registrar_horas()
+        elif opcion == 5: ver_horas_por_tarea()
+        elif opcion == 6: ver_horas_por_proyecto()
+        elif opcion == 7: actualizar_empleado()
+        elif opcion == 8: actualizar_proyecto()
+        elif opcion == 9: eliminar_tarea()
+        elif opcion == 0: print("\n¡Hasta luego!")
+        else:             print("Opción no válida.")
+
+
+if __name__ == "__main__":
+    menu_principal()
