@@ -54,3 +54,47 @@ class TestEmpleados(unittest.TestCase):
         m.nom_empleado.append("Carlos"); m.cargo_empleado.append("PM")
         id_emp = len(m.nom_empleado)
         self.assertEqual(id_emp, 1)
+
+# ─────────────────────────────────────────────
+# TEST PROYECTOS
+# ─────────────────────────────────────────────
+class TestProyectos(unittest.TestCase):
+
+    def setUp(self):
+        resetear()
+
+    def test_registrar_proyecto_agrega_a_lista(self):
+        m.nom_proyecto.append("Sistema Web")
+        self.assertIn("Sistema Web", m.nom_proyecto)
+
+    def test_lista_proyectos_inicia_vacia(self):
+        self.assertEqual(len(m.nom_proyecto), 0)
+
+    def test_actualizar_nombre_proyecto(self):
+        m.nom_proyecto.append("Proyecto Viejo")
+        m.nom_proyecto[0] = "Proyecto Nuevo"
+        self.assertEqual(m.nom_proyecto[0], "Proyecto Nuevo")
+
+    def test_multiples_proyectos(self):
+        m.nom_proyecto.extend(["P1", "P2", "P3"])
+        self.assertEqual(len(m.nom_proyecto), 3)
+
+    def test_id_proyecto_es_posicion_mas_uno(self):
+        m.nom_proyecto.append("App Ventas")
+        self.assertEqual(len(m.nom_proyecto), 1)
+
+    def test_horas_proyecto_suma_tareas(self):
+        # Proyecto 0, empleado 0, tarea 0
+        m.nom_proyecto.append("P1")
+        m.nom_empleado.append("Dev"); m.cargo_empleado.append("Dev")
+        m.nom_tarea.append("T1"); m.tarea_proyecto.append(0); m.tarea_empleado.append(0)
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("01/05/2026"); m.reg_horas.append(5.0)
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("02/05/2026"); m.reg_horas.append(3.0)
+        total = sum(
+            m.reg_horas[j]
+            for j in range(len(m.reg_horas))
+            if m.tarea_proyecto[m.reg_tarea[j]] == 0
+        )
+        self.assertEqual(total, 8.0)
