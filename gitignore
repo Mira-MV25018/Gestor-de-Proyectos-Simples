@@ -1,0 +1,25 @@
+# Archivos generados por Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+env/
+.env/
+.venv/
+
+# Archivos de configuración de IDEs
+.idea/
+.vscode/
+*.iml
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Reportes de pruebas
+*.xml
+htmlcov/
+.coverage

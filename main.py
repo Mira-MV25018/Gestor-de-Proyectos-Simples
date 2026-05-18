@@ -1,6 +1,15 @@
+# ------------------------------------------------------------------------
+#   GESTOR DE PROYECTOS SIMPLE
+#   Asignatura : Lógica de Programación Orientada a Objetos
+#   Ciclo      : I/2026 — Universidad de El Salvador
+#   Tema       : 7 — Gestor de Proyectos Simple
+#   Integrantes: José Amilcar Mira Vásquez
+#                Kenia Yamileth Murillo Gutiérrez
+# ------------------------------------------------------------------------
+
 # --------------------------------------------------------------------------
 #   ALMACENAMIENTO EN MEMORIA
-# ----------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 nom_empleado   = []
 cargo_empleado = []
@@ -17,31 +26,31 @@ reg_fecha      = []   # "DD/MM/AAAA"
 reg_horas      = []   # float
 
 
-# ----------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   UTILIDADES
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 def separador():
-    print("-------------------------------------------------------------------------")
+    print("=" * 60)
 
 def pedir_entero(mensaje):
     while True:
         try:
             return int(input(mensaje))
         except ValueError:
-            print("  Ingrese un número entero válido.")
+            print("  ⚠ Ingrese un número entero válido.")
 
 def pedir_real(mensaje):
     while True:
         try:
             return float(input(mensaje))
         except ValueError:
-            print("  Ingrese un número válido (ej: 4.5).")
+            print("  ⚠ Ingrese un número válido (ej: 4.5).")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 1 - REGISTRAR EMPLEADO
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 1 — REGISTRAR EMPLEADO
+# --------------------------------------------------------------------------
 
 def registrar_empleado():
     print("\n--- REGISTRAR EMPLEADO ---")
@@ -55,13 +64,13 @@ def registrar_empleado():
         return
     nom_empleado.append(nombre)
     cargo_empleado.append(cargo)
-    print(f"Empleado registrado. ID: {len(nom_empleado)}")
-    print(f"Nombre: {nombre} | Cargo: {cargo}")
+    print(f"✔ Empleado registrado  |  ID: {len(nom_empleado)}")
+    print(f"  Nombre: {nombre}  |  Cargo: {cargo}")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 2 - REGISTRAR PROYECTO
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 2 — REGISTRAR PROYECTO
+# --------------------------------------------------------------------------
 
 def registrar_proyecto():
     print("\n--- REGISTRAR PROYECTO ---")
@@ -70,13 +79,13 @@ def registrar_proyecto():
         print("ERROR: El nombre no puede estar vacío.")
         return
     nom_proyecto.append(nombre)
-    print(f"Proyecto registrado. ID: {len(nom_proyecto)}")
-    print(f"Nombre: {nombre}")
+    print(f"✔ Proyecto registrado  |  ID: {len(nom_proyecto)}")
+    print(f"  Nombre: {nombre}")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 3 - REGISTRAR TAREA
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 3 — REGISTRAR TAREA
+# --------------------------------------------------------------------------
 
 def registrar_tarea():
     print("\n--- REGISTRAR TAREA ---")
@@ -97,7 +106,7 @@ def registrar_tarea():
 
     print("Empleados disponibles:")
     for i, e in enumerate(nom_empleado, start=1):
-        print(f"  [{i}] {e} - {cargo_empleado[i-1]}")
+        print(f"  [{i}] {e}  ({cargo_empleado[i-1]})")
     id_emp = pedir_entero("ID del empleado asignado: ")
     if id_emp < 1 or id_emp > len(nom_empleado):
         print("ERROR: ID de empleado no válido.")
@@ -111,15 +120,15 @@ def registrar_tarea():
     nom_tarea.append(nombre)
     tarea_proyecto.append(id_proy - 1)
     tarea_empleado.append(id_emp - 1)
-    print(f"Tarea registrada. ID: {len(nom_tarea)}")
-    print(f"Tarea: {nombre}")
-    print(f"Proyecto: {nom_proyecto[id_proy-1]}")
-    print(f"Empleado: {nom_empleado[id_emp-1]}")
+    print(f"✔ Tarea registrada  |  ID: {len(nom_tarea)}")
+    print(f"  Tarea   : {nombre}")
+    print(f"  Proyecto: {nom_proyecto[id_proy-1]}")
+    print(f"  Empleado: {nom_empleado[id_emp-1]}")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 4 - REGISTRAR HORAS TRABAJADAS
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 4 — REGISTRAR HORAS TRABAJADAS
+# --------------------------------------------------------------------------
 
 def registrar_horas():
     print("\n--- REGISTRAR HORAS TRABAJADAS ---")
@@ -147,36 +156,42 @@ def registrar_horas():
         return
 
     fecha = input("Fecha (DD/MM/AAAA): ").strip()
-    horas = pedir_real("Horas trabajadas: ")
-
-    if horas <= 0 or horas > 24:
-        print("ERROR: Las horas deben ser entre 0.5 y 24.")
+    if not fecha:
+        print("ERROR: La fecha no puede estar vacía.")
         return
 
-    # Validar máximo 24h por día por empleado (igual que en PSeInt)
+    horas = pedir_real("Horas trabajadas: ")
+    if horas <= 0:
+        print("ERROR: Las horas deben ser mayores a 0.")
+        return
+    if horas > 24:
+        print("ERROR: No se pueden registrar más de 24 horas en un día.")
+        return
+
+    # Validar acumulado del día para ese empleado
     acum_dia = sum(
         reg_horas[i]
         for i in range(len(reg_horas))
         if reg_empleado[i] == id_emp - 1 and reg_fecha[i] == fecha
     )
     if acum_dia + horas > 24:
-        print(f"ERROR: {nom_empleado[id_emp-1]} ya tiene {acum_dia}h ese día.")
-        print(f"Puede registrar hasta {24 - acum_dia:.1f} hora(s) más.")
+        print(f"ERROR: {nom_empleado[id_emp-1]} ya tiene {acum_dia}h registradas ese día.")
+        print(f"       Puede registrar hasta {24 - acum_dia:.1f} hora(s) más.")
         return
 
     reg_tarea.append(id_tarea - 1)
     reg_empleado.append(id_emp - 1)
     reg_fecha.append(fecha)
     reg_horas.append(horas)
-    print("Horas registradas correctamente.")
-    print(f"Empleado: {nom_empleado[id_emp-1]} | Tarea: {nom_tarea[id_tarea-1]}")
-    print(f"Fecha: {fecha} | Horas: {horas}")
-    print(f"Total acumulado ese día: {acum_dia + horas:.1f}h")
+    print("✔ Horas registradas correctamente.")
+    print(f"  Empleado: {nom_empleado[id_emp-1]}  |  Tarea: {nom_tarea[id_tarea-1]}")
+    print(f"  Fecha   : {fecha}  |  Horas: {horas}")
+    print(f"  Total acumulado ese día: {acum_dia + horas:.1f}h")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 5 - VER HORAS POR TAREA
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 5 — VER HORAS POR TAREA
+# --------------------------------------------------------------------------
 
 def ver_horas_por_tarea():
     print("\n--- HORAS POR TAREA ---")
@@ -189,10 +204,11 @@ def ver_horas_por_tarea():
         print(f"       Proyecto : {nom_proyecto[tarea_proyecto[i]]}")
         print(f"       Empleado : {nom_empleado[tarea_empleado[i]]}")
         print(f"       Horas    : {total_h:.1f} hora(s)")
+        print()
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 6 - VER HORAS POR PROYECTO
+# --------------------------------------------------------------------------
+#   OPCIÓN 6 — VER HORAS POR PROYECTO
 # --------------------------------------------------------------------------
 
 def ver_horas_por_proyecto():
@@ -200,7 +216,7 @@ def ver_horas_por_proyecto():
     if not nom_proyecto:
         print("No hay proyectos registrados.")
         return
-    gran_total = 0
+    gran_total = 0.0
     for i in range(len(nom_proyecto)):
         total_h = sum(
             reg_horas[j]
@@ -208,14 +224,14 @@ def ver_horas_por_proyecto():
             if tarea_proyecto[reg_tarea[j]] == i
         )
         gran_total += total_h
-        print(f"  [{i+1}] {nom_proyecto[i]} -> {total_h:.1f} hora(s)")
-    print("-------------------------------")
+        print(f"  [{i+1}] {nom_proyecto[i]}  →  {total_h:.1f} hora(s)")
+    print("-" * 40)
     print(f"  TOTAL GENERAL: {gran_total:.1f} hora(s)")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 7 - ACTUALIZAR EMPLEADO
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 7 — ACTUALIZAR EMPLEADO
+# --------------------------------------------------------------------------
 
 def actualizar_empleado():
     print("\n--- ACTUALIZAR EMPLEADO ---")
@@ -224,24 +240,25 @@ def actualizar_empleado():
         return
     print("Empleados disponibles:")
     for i, e in enumerate(nom_empleado, start=1):
-        print(f"  [{i}] {e} - {cargo_empleado[i-1]}")
+        print(f"  [{i}] {e}  ({cargo_empleado[i-1]})")
     id_emp = pedir_entero("ID del empleado a actualizar: ")
     if id_emp < 1 or id_emp > len(nom_empleado):
         print("ERROR: ID no válido.")
         return
-    print(f"Datos actuales -> Nombre: {nom_empleado[id_emp-1]} | Cargo: {cargo_empleado[id_emp-1]}")
+    print(f"  Nombre actual : {nom_empleado[id_emp-1]}")
+    print(f"  Cargo actual  : {cargo_empleado[id_emp-1]}")
     nuevo_nombre = input("Nuevo nombre (ENTER para no cambiar): ").strip()
     nuevo_cargo  = input("Nuevo cargo  (ENTER para no cambiar): ").strip()
     if nuevo_nombre:
         nom_empleado[id_emp - 1] = nuevo_nombre
     if nuevo_cargo:
         cargo_empleado[id_emp - 1] = nuevo_cargo
-    print(f"Empleado actualizado -> Nombre: {nom_empleado[id_emp-1]} | Cargo: {cargo_empleado[id_emp-1]}")
+    print(f"✔ Empleado actualizado  →  {nom_empleado[id_emp-1]}  |  {cargo_empleado[id_emp-1]}")
 
 
-# ---------------------------------------------------------------------------
-#   OPCIÓN 8 - ACTUALIZAR PROYECTO
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 8 — ACTUALIZAR PROYECTO
+# --------------------------------------------------------------------------
 
 def actualizar_proyecto():
     print("\n--- ACTUALIZAR PROYECTO ---")
@@ -255,18 +272,18 @@ def actualizar_proyecto():
     if id_proy < 1 or id_proy > len(nom_proyecto):
         print("ERROR: ID no válido.")
         return
-    print(f"Nombre actual: {nom_proyecto[id_proy-1]}")
+    print(f"  Nombre actual: {nom_proyecto[id_proy-1]}")
     nuevo_nombre = input("Nuevo nombre (ENTER para no cambiar): ").strip()
     if nuevo_nombre:
         nom_proyecto[id_proy - 1] = nuevo_nombre
-        print(f"Proyecto actualizado -> {nom_proyecto[id_proy-1]}")
+        print(f"✔ Proyecto actualizado  →  {nom_proyecto[id_proy-1]}")
     else:
         print("Sin cambios.")
 
 
-# -------------------------------------------------------------------------
-#   OPCIÓN 9 - ELIMINAR TAREA
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+#   OPCIÓN 9 — ELIMINAR TAREA
+# --------------------------------------------------------------------------
 
 def eliminar_tarea():
     print("\n--- ELIMINAR TAREA ---")
@@ -280,6 +297,7 @@ def eliminar_tarea():
     if id_tarea < 1 or id_tarea > len(nom_tarea):
         print("ERROR: ID no válido.")
         return
+
     confirmacion = input(f"¿Eliminar tarea '{nom_tarea[id_tarea-1]}'? (s/n): ").strip().lower()
     if confirmacion != "s":
         print("Operación cancelada.")
@@ -288,12 +306,14 @@ def eliminar_tarea():
     nombre_eliminado = nom_tarea[id_tarea - 1]
     idx = id_tarea - 1
 
-    # Eliminar registros de horas de esta tarea y reasignar índices
+    # Eliminar registros de horas asociados y reasignar índices
     i = 0
     while i < len(reg_tarea):
         if reg_tarea[i] == idx:
-            reg_tarea.pop(i); reg_empleado.pop(i)
-            reg_fecha.pop(i); reg_horas.pop(i)
+            reg_tarea.pop(i)
+            reg_empleado.pop(i)
+            reg_fecha.pop(i)
+            reg_horas.pop(i)
         else:
             if reg_tarea[i] > idx:
                 reg_tarea[i] -= 1
@@ -302,33 +322,36 @@ def eliminar_tarea():
     nom_tarea.pop(idx)
     tarea_proyecto.pop(idx)
     tarea_empleado.pop(idx)
-    print(f"Tarea '{nombre_eliminado}' eliminada correctamente.")
+    print(f"✔ Tarea '{nombre_eliminado}' eliminada correctamente.")
 
 
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   MENÚ PRINCIPAL
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 def menu_principal():
     opcion = -1
     while opcion != 0:
-        print("")
+        print()
         separador()
-        print("     GESTOR DE PROYECTOS SIMPLE      ")
+        print("       GESTOR DE PROYECTOS SIMPLE")
+        print("  Universidad de El Salvador — Ciclo I/2026")
         separador()
-        print("  1. Registrar empleado")
-        print("  2. Registrar proyecto")
-        print("  3. Registrar tarea")
-        print("  4. Registrar horas trabajadas")
-        print("  5. Ver horas por tarea")
-        print("  6. Ver horas por proyecto")
-        print("  ---- CRUD --- Entrega #2 ----")
-        print("  7. Actualizar empleado")
-        print("  8. Actualizar proyecto")
-        print("  9. Eliminar tarea")
-        print("  0. Salir")
+        print("  [1] Registrar empleado")
+        print("  [2] Registrar proyecto")
+        print("  [3] Registrar tarea")
+        print("  [4] Registrar horas trabajadas")
+        print("  [5] Ver horas por tarea")
+        print("  [6] Ver horas por proyecto")
         separador()
-        opcion = pedir_entero("Elige una opción: ")
+        print("  ──── CRUD (Entrega #2) ────")
+        print("  [7] Actualizar empleado")
+        print("  [8] Actualizar proyecto")
+        print("  [9] Eliminar tarea")
+        separador()
+        print("  [0] Salir")
+        separador()
+        opcion = pedir_entero("  Elige una opción: ")
 
         if   opcion == 1: registrar_empleado()
         elif opcion == 2: registrar_proyecto()
@@ -340,7 +363,7 @@ def menu_principal():
         elif opcion == 8: actualizar_proyecto()
         elif opcion == 9: eliminar_tarea()
         elif opcion == 0: print("\n¡Hasta luego!")
-        else:             print("Opción no válida.")
+        else:             print("  ⚠ Opción no válida.")
 
 
 if __name__ == "__main__":
