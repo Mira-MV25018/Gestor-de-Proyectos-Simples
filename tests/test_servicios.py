@@ -56,7 +56,7 @@ class TestEmpleados(unittest.TestCase):
         self.assertEqual(id_emp, 1)
 
 # ─────────────────────────────────────────────
-# TEST PROYECTOS
+# AGREGANDO PRUEBAS UNITARIAS DE PROYECTOS
 # ─────────────────────────────────────────────
 class TestProyectos(unittest.TestCase):
 
@@ -98,3 +98,49 @@ class TestProyectos(unittest.TestCase):
             if m.tarea_proyecto[m.reg_tarea[j]] == 0
         )
         self.assertEqual(total, 8.0)
+
+# ───────────────────────────────────────────────
+# AGREGANDO PRUEBAS DE TAREAS Y REGISTRO DE HORA
+# ───────────────────────────────────────────────
+class TestTareas(unittest.TestCase):
+
+    def setUp(self):
+        resetear()
+        m.nom_proyecto.append("P1")
+        m.nom_empleado.append("Dev"); m.cargo_empleado.append("Dev")
+
+    def test_registrar_tarea_agrega_a_lista(self):
+        m.nom_tarea.append("Login")
+        m.tarea_proyecto.append(0)
+        m.tarea_empleado.append(0)
+        self.assertEqual(m.nom_tarea[0], "Login")
+
+    def test_tarea_referencia_proyecto_correcto(self):
+        m.nom_tarea.append("T1"); m.tarea_proyecto.append(0); m.tarea_empleado.append(0)
+        self.assertEqual(m.tarea_proyecto[0], 0)
+
+    def test_tarea_referencia_empleado_correcto(self):
+        m.nom_tarea.append("T1"); m.tarea_proyecto.append(0); m.tarea_empleado.append(0)
+        self.assertEqual(m.tarea_empleado[0], 0)
+
+    def test_eliminar_tarea_reduce_lista(self):
+        m.nom_tarea.append("T1"); m.tarea_proyecto.append(0); m.tarea_empleado.append(0)
+        m.nom_tarea.pop(0); m.tarea_proyecto.pop(0); m.tarea_empleado.pop(0)
+        self.assertEqual(len(m.nom_tarea), 0)
+
+    def test_multiples_tareas_mismo_proyecto(self):
+        for nombre in ["T1", "T2", "T3"]:
+            m.nom_tarea.append(nombre)
+            m.tarea_proyecto.append(0)
+            m.tarea_empleado.append(0)
+        tareas_p0 = [i for i in range(len(m.tarea_proyecto)) if m.tarea_proyecto[i] == 0]
+        self.assertEqual(len(tareas_p0), 3)
+
+    def test_horas_tarea_acumula_correctamente(self):
+        m.nom_tarea.append("T1"); m.tarea_proyecto.append(0); m.tarea_empleado.append(0)
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("10/05/2026"); m.reg_horas.append(4.0)
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("11/05/2026"); m.reg_horas.append(6.0)
+        total = sum(m.reg_horas[j] for j in range(len(m.reg_horas)) if m.reg_tarea[j] == 0)
+        self.assertEqual(total, 10.0)
