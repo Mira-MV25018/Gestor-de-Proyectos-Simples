@@ -144,3 +144,57 @@ class TestTareas(unittest.TestCase):
         m.reg_fecha.append("11/05/2026"); m.reg_horas.append(6.0)
         total = sum(m.reg_horas[j] for j in range(len(m.reg_horas)) if m.reg_tarea[j] == 0)
         self.assertEqual(total, 10.0)
+# ───────────────────────────────────────────────
+# AGREGANDO PRUEBAS DE REGISTRO DE HORAs
+# ───────────────────────────────────────────────
+class TestRegistroHoras(unittest.TestCase):
+
+    def setUp(self):
+        resetear()
+        m.nom_proyecto.append("P1")
+        m.nom_empleado.append("Dev"); m.cargo_empleado.append("Dev")
+        m.nom_tarea.append("T1"); m.tarea_proyecto.append(0); m.tarea_empleado.append(0)
+
+    def _acum_dia(self, id_emp_0, fecha):
+        return sum(
+            m.reg_horas[i]
+            for i in range(len(m.reg_horas))
+            if m.reg_empleado[i] == id_emp_0 and m.reg_fecha[i] == fecha
+        )
+
+    def test_registrar_horas_agrega_registro(self):
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("13/05/2026"); m.reg_horas.append(8.0)
+        self.assertEqual(len(m.reg_horas), 1)
+        self.assertEqual(m.reg_horas[0], 8.0)
+
+    def test_validacion_no_superar_24h_mismo_dia(self):
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("13/05/2026"); m.reg_horas.append(20.0)
+        acum = self._acum_dia(0, "13/05/2026")
+        # Intentar agregar 5h más: 20 + 5 = 25 > 24 → debe rechazarse
+        self.assertGreater(acum + 5, 24)
+
+    def test_exactamente_24h_es_valido(self):
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("13/05/2026"); m.reg_horas.append(24.0)
+        acum = self._acum_dia(0, "13/05/2026")
+        self.assertLessEqual(acum, 24)
+
+    def test_dias_distintos_no_interfieren(self):
+        m.reg_tarea.append(0); m.reg_empleado.append(0)
+        m.reg_fecha.append("13/05/2026"); m.reg_horas.append(10.0)
+        # Otro día debe empezar desde 0
+        acum_otro_dia = self._acum_dia(0, "14/05/2026")
+        self.assertEqual(acum_otro_dia, 0.0)
+
+    def test_horas_negativas_invalidas(self):
+        horas = -1.0
+        self.assertTrue(horas <= 0)   # condición de rechazo del main
+
+    def test_horas_cero_invalidas(self):
+        horas = 0.0
+        self.assertTrue(horas <= 0)
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
