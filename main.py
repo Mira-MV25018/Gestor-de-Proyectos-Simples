@@ -528,6 +528,28 @@ def buscar_empleado():
         print("No se encontraron empleados.")
 
 # --------------------------------------------------------------------------
+#   OPCIÓN 14  — BUSCAR PROYECTO
+# --------------------------------------------------------------------------
+def buscar_proyecto():
+    print("\n--- BUSCAR PROYECTO ---")
+
+    if not nom_proyecto:
+        print("ERROR: No hay proyectos registrados.")
+        return
+
+    nombre = input("Ingrese el nombre del proyecto: ").strip().lower()
+
+    encontrados = False
+
+    for i, proyecto in enumerate(nom_proyecto):
+        if nombre in proyecto.lower():
+            print(f"[{i+1}] {proyecto}")
+            encontrados = True
+
+    if not encontrados:
+        print("No se encontraron proyectos.")
+
+# --------------------------------------------------------------------------
 #   MENÚ PRINCIPAL
 # --------------------------------------------------------------------------
 
@@ -556,6 +578,7 @@ def menu_principal():
         print(" [10] Eliminar tarea")
         print(" [11] Eliminar empleado")
         print(" [12] Eliminar proyecto")
+        print(" [13] Buscar empleado")
         separador()
         print("  [0] Salir")
         separador()
