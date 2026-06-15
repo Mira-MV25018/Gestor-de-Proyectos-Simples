@@ -26,6 +26,27 @@ Sistema que permite gestionar proyectos empresariales, sus tareas y el registro 
 ---
 
 ##  Cómo ejecutar el programa
+    Desde la raíz del proyecto:
+
+    python main.py
+
+    Ejemplo:
+
+    ===== GESTOR DE PROYECTOS =====
+
+    [1] Registrar empleado
+    [2] Registrar proyecto
+    [3] Registrar tarea
+    [4] Registrar horas trabajadas
+    ...
+    [0] Salir
+
+    Seleccione una opción:
+
+### Versión Gráfica
+    python "Interfaz del Sistema/main.py"
+
+    La interfaz gráfica permite administrar empleados, proyectos, tareas y horas trabajadas de forma visual mediante Tkinter.
 
 ### Requisitos previos
 - Python 3.8 o superior instalado
@@ -64,27 +85,26 @@ python -m unittest tests/test_servicios.py -v
 
 ### Ejemplo de salida esperada
 
-```
-test_registrar_empleado_agrega_a_lista ... ok
-test_lista_inicia_vacia ... ok
-test_actualizar_nombre_empleado ... ok
-...
-Ran 18 tests in 0.002s
+test_01_validar_fecha_formato_correcto ... ok test_02_validar_fecha_formato_incorrecto ... ok test_03_validar_fecha_dias_mes_correcto ... ok ... test_41_prueba_registro_horas_limite ... ok ---------------------------------------------------------------------- Ran 41 tests 
+
 OK
-```
 
 ---
 
 ##  Estructura del proyecto
 
 ```
-gestor-proyectos/
+Gestor-de-Proyectos-Simples/ 
+│ 
+├── main.py 
+├── test_servicios.py 
+├── README.md 
+├── .gitignore 
 │
-├── main.py                  # Programa principal (menú CLI)
-├── tests/
-│   └── test_servicios.py    # Pruebas unitarias
-├── .gitignore
-└── README.md
+├── Interfaz del Sistema/ 
+│ └── main.py 
+│ 
+└── pseudocódigo/
 ```
 
 ---
@@ -93,25 +113,41 @@ gestor-proyectos/
 
 | Opción | Descripción |
 |--------|-------------|
-| 1 | Registrar empleado |
-| 2 | Registrar proyecto |
-| 3 | Registrar tarea (asignada a proyecto y empleado) |
-| 4 | Registrar horas trabajadas (con validación de 24h/día) |
-| 5 | Ver horas acumuladas por tarea |
-| 6 | Ver horas acumuladas por proyecto |
-| 7 | Actualizar datos de un empleado *(CRUD)* |
-| 8 | Actualizar nombre de un proyecto *(CRUD)* |
-| 9 | Eliminar una tarea *(CRUD)* |
-| 0 | Salir |
+[1] Registrar empleado
+[2] Registrar proyecto
+[3] Registrar tarea
+[4] Registrar horas trabajadas
+
+[5] Ver horas por tarea
+[6] Ver horas por proyecto
+[7] Ver horas por empleado
+
+[8] Actualizar empleado
+[9] Actualizar proyecto
+[10] Eliminar tarea
+[11] Eliminar empleado
+[12] Eliminar proyecto
+[13] Buscar empleado
+
+[0] Salir
 
 ---
 
 ##  Validaciones implementadas
 
-- Nombres y campos no pueden estar vacíos.
-- Los IDs de empleado, proyecto y tarea deben existir.
-- Las horas deben ser un número mayor a 0 y no superar 24.
-- Un empleado no puede acumular más de 24 horas en el mismo día.
+- Validación de datos
+    -Los nombres no pueden estar vacíos.
+    -Los IDs deben existir antes de realizar operaciones.
+    -No pueden registrarse tareas sin empleados y proyectos válidos.
+- Validación de horas
+    -Las horas deben ser mayores que cero.
+    -No se permiten registros mayores a 24 horas.
+    -Un empleado no puede acumular más de 24 horas en una misma fecha.
+- Validación de fechas
+    -Formato obligatorio: DD/MM/AAAA.
+    -Validación de días según el mes.
+    -Soporte para años bisiestos.
+    -Rango permitido entre 2000 y 2100.
 
 ---
 
@@ -128,5 +164,5 @@ gestor-proyectos/
 | Entrega | Fecha | Estado |
 |---------|-------|--------|
 | Entrega #1 | 13 – 19 Abril |  Completada |
-| Entrega #2 | 18 – 24 Mayo | En progreso |
-| Entrega #3 | 15 – 21 Junio |  Pendiente |
+| Entrega #2 | 18 – 24 Mayo | Completada |
+| Entrega #3 | 15 – 21 Junio |  en proceso |
