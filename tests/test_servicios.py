@@ -134,7 +134,7 @@ class TestProyectos(unittest.TestCase):
 
 
 # -----------------------------------------------------------------
-# INTEGRANTE 2 — Tareas y Registro de Horas
+# Tareas y Registro de Horas
 # -----------------------------------------------------------------
 
 class TestTareas(unittest.TestCase):
