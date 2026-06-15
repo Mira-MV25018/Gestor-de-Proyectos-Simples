@@ -11,7 +11,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Importar el modulo visual
+# Importar el modulo principal
 try:
     import main as m
 except ImportError:
@@ -432,7 +432,7 @@ class TestCasosBorde(unittest.TestCase):
 
 
 # --------------------------------------------------------------------------
-#   PRUEBAS MINIMAS REQUERIDAS (una por integrante - sin nombres visibles)
+#   PRUEBAS MINIMAS REQUERIDAS
 # --------------------------------------------------------------------------
 
 class TestPruebasMinimas(unittest.TestCase):
